@@ -1,6 +1,4 @@
-package com.acorp.falcodoro.falcodoromanager.reservation;
-
-import com.acorp.falcodoro.falcodoromanager.room.RoomModel;
+package com.acorp.falcodoro.falcodoromanager.models;
 
 import javax.persistence.*;
 import java.util.Date;

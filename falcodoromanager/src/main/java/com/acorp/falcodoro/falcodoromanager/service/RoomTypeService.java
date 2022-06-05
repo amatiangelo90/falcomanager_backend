@@ -1,5 +1,7 @@
-package com.acorp.falcodoro.falcodoromanager.roomtype;
+package com.acorp.falcodoro.falcodoromanager.service;
 
+import com.acorp.falcodoro.falcodoromanager.models.RoomTypeModel;
+import com.acorp.falcodoro.falcodoromanager.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +13,8 @@ import java.util.Optional;
 @Service
 public class RoomTypeService {
 
-    private final RoomTypeRepository roomTypeRepository;
-
     @Autowired
-    public RoomTypeService(RoomTypeRepository roomTypeRepository) {
-        this.roomTypeRepository = roomTypeRepository;
-    }
+    private RoomTypeRepository roomTypeRepository;
 
     public List<RoomTypeModel> retrieveAll() {
         return roomTypeRepository.findAll();
@@ -26,7 +24,9 @@ public class RoomTypeService {
         roomTypeRepository.delete(roomTypeModel);
     }
 
-    public void addRoomType(RoomTypeModel roomTypeModel) {
+    public void addRoomType(RoomTypeModel roomTypeModel) throws IllegalStateException{
+        if(roomTypeRepository.findByTypeName(roomTypeModel.getTypeName()).isPresent())
+            throw new IllegalStateException("Error. RoomType name already taken. Choose different name");
         roomTypeRepository.save(roomTypeModel);
     }
 
@@ -40,7 +40,7 @@ public class RoomTypeService {
         if(roomTypeModel.getTypeName() != null
                 && roomTypeModel.getTypeName().length() > 0
                 && !Objects.equals(roomTypeModel.getTypeName(), roomTypeModelRetrieved.getTypeName())){
-            Optional<RoomTypeModel> optionalUserModel = roomTypeRepository.findByType(roomTypeModel.getTypeName());
+            Optional<RoomTypeModel> optionalUserModel = roomTypeRepository.findByTypeName(roomTypeModel.getTypeName());
             if(optionalUserModel.isPresent()){
                 throw new IllegalStateException("Error. Type " + roomTypeModel.getTypeName() + " is already configured.");
             }

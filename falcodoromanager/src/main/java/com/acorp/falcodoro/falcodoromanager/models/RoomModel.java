@@ -1,15 +1,12 @@
-package com.acorp.falcodoro.falcodoromanager.room;
+package com.acorp.falcodoro.falcodoromanager.models;
 
-import com.acorp.falcodoro.falcodoromanager.roomtype.RoomTypeModel;
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity(name = "RoomModel")
-@Table(name = "ROOM",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "roomNumber", columnNames = "roomNumber")
-        })
-public class RoomModel {
+@Table(name = "ROOM")
+public class RoomModel implements Serializable {
     @Id
     @SequenceGenerator(
             name = "room_id",
@@ -25,20 +22,15 @@ public class RoomModel {
             updatable = false
     )
     private long roomId;
-    private String name;
-    @Column(
-            nullable = true
-    )
     private int roomNumber;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="typename", nullable=false)
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="typename")
     private RoomTypeModel roomTypeModel;
 
     public RoomModel() {}
 
-    public RoomModel(String name, int roomNumber, RoomTypeModel roomTypeModel) {
-        this.name = name;
+    public RoomModel(int roomNumber, RoomTypeModel roomTypeModel) {
         this.roomNumber = roomNumber;
         this.roomTypeModel = roomTypeModel;
     }
@@ -49,14 +41,6 @@ public class RoomModel {
 
     public void setRoomId(long roomId) {
         this.roomId = roomId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getRoomNumber() {

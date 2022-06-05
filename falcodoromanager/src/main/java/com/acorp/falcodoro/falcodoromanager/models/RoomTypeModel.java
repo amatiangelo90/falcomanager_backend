@@ -1,13 +1,14 @@
-package com.acorp.falcodoro.falcodoromanager.roomtype;
+package com.acorp.falcodoro.falcodoromanager.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "RoomTypeModel")
 @Table(
         name = "ROOM_TYPE"
 
 )
-public class RoomTypeModel {
+public class RoomTypeModel implements Serializable {
 
     @Id
     @SequenceGenerator(
@@ -32,6 +33,8 @@ public class RoomTypeModel {
     )
     private String typeName;
     private int guests;
+
+    @Enumerated(EnumType.STRING)
     private BedType bedType;
 
     public RoomTypeModel() {

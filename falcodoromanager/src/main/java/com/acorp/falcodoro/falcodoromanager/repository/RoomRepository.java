@@ -1,5 +1,6 @@
-package com.acorp.falcodoro.falcodoromanager.room;
+package com.acorp.falcodoro.falcodoromanager.repository;
 
+import com.acorp.falcodoro.falcodoromanager.models.RoomModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

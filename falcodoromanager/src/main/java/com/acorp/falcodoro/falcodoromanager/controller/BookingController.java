@@ -1,10 +1,14 @@
-package com.acorp.falcodoro.falcodoromanager.reservation;
+package com.acorp.falcodoro.falcodoromanager.controller;
 
+import com.acorp.falcodoro.falcodoromanager.models.BookingModel;
+import com.acorp.falcodoro.falcodoromanager.service.BookingService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api
 @RestController
 @RequestMapping(path = "api/v1/booking")
 public class BookingController {
@@ -22,11 +26,7 @@ public class BookingController {
     }
 
     @PostMapping(path = "/save")
-    public void save(BookingModel bookingModel){
-        bookingService.addNewBooking(bookingModel);
-
-    }
-
+    public void save(BookingModel bookingModel) { bookingService.addNewBooking(bookingModel); }
     @DeleteMapping(path = "/delete")
     public void delete(BookingModel bookingModel){
         bookingService.delete(bookingModel);

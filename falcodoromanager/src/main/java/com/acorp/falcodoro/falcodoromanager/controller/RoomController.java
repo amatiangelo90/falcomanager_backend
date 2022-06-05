@@ -1,20 +1,20 @@
-package com.acorp.falcodoro.falcodoromanager.room;
+package com.acorp.falcodoro.falcodoromanager.controller;
 
+import com.acorp.falcodoro.falcodoromanager.models.RoomModel;
+import com.acorp.falcodoro.falcodoromanager.service.RoomService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api
 @RestController
 @RequestMapping(path = "api/v1/room")
 public class RoomController {
 
-    private final RoomService roomService;
-
     @Autowired
-    public RoomController(RoomService roomService) {
-        this.roomService = roomService;
-    }
+    private RoomService roomService;
 
     @GetMapping(path = "/findall")
     public List<RoomModel> retrieveAll(){

@@ -1,20 +1,17 @@
-package com.acorp.falcodoro.falcodoromanager.reservation;
+package com.acorp.falcodoro.falcodoromanager.service;
 
+import com.acorp.falcodoro.falcodoromanager.models.BookingModel;
+import com.acorp.falcodoro.falcodoromanager.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class BookingService {
 
-    private BookingRepository bookingRepository;
-
     @Autowired
-    public BookingService(BookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
-    }
+    private BookingRepository bookingRepository;
 
 
     public List<BookingModel> retrieveAll() {

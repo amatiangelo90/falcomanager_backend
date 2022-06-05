@@ -1,11 +1,12 @@
-package com.acorp.falcodoro.falcodoromanager.room;
+package com.acorp.falcodoro.falcodoromanager.service;
 
+import com.acorp.falcodoro.falcodoromanager.models.RoomModel;
+import com.acorp.falcodoro.falcodoromanager.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class RoomService {
@@ -37,12 +38,6 @@ public class RoomService {
             roomRetrieved.setRoomNumber(roomModel.getRoomNumber());
         }
 
-        if(roomModel.getName() != null &&
-                roomModel.getName().length() > 0 &&
-                !Objects.equals(roomModel.getName(), roomRetrieved.getName())){
-
-            roomRetrieved.setName(roomModel.getName());
-        }
         if(roomModel.getRoomTypeModel() != null && roomModel.getRoomTypeModel().toString().length() != 0){
             roomRetrieved.setRoomTypeModel(roomModel.getRoomTypeModel());
         }
