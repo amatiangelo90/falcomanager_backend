@@ -22,18 +22,34 @@ public class BookingController {
 
     @GetMapping(path = "/findall")
     public List<BookingModel> retrieveAll(){
-        return bookingService.retrieveAll();
+        return bookingService.findAll();
     }
 
     @PostMapping(path = "/save")
     public void save(BookingModel bookingModel) { bookingService.addNewBooking(bookingModel); }
+
     @DeleteMapping(path = "/delete")
     public void delete(BookingModel bookingModel){
         bookingService.delete(bookingModel);
     }
 
     @GetMapping(path = "/deletebyid/{id}")
-    public void deleteRoomTypeById(@PathVariable("id") long id){
+    public void deleteBookTypeById(@PathVariable("id") long id){
         bookingService.deleteById(id);
+    }
+
+    @GetMapping(path = "/deletebycode/{code}")
+    public void deleteBookTypeById(@PathVariable("code") String code){
+        bookingService.deleteByCode(code);
+    }
+
+    @GetMapping(path = "/findByCode/{code}")
+    public List<BookingModel> findByCode(@PathVariable("code") String code){
+        return bookingService.findByCode(code);
+    }
+
+    @PostMapping(path = "/adddaytobooking/{bookingid}/{roomid}/{reservationdate}/{nights}")
+    public void addDay(@PathVariable("bookingid") long bookingid, @PathVariable("roomid") int roomid, @PathVariable("reservationdate") String reservationdate, @PathVariable("nights") int nights){
+        bookingService.addDay(bookingid, roomid, reservationdate, nights);
     }
 }

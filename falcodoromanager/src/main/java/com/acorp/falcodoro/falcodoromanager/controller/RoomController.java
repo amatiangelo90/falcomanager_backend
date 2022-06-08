@@ -33,4 +33,9 @@ public class RoomController {
 
     @DeleteMapping(path = "/delete")
     public void deleteRoom(RoomModel roomModel) { roomService.delete(roomModel);}
+
+    @GetMapping(path = "/deletebyid/{id}")
+    public void deleteRoomTypeById(@PathVariable("id") long id){
+        roomService.deleteById(id);
+    }
 }

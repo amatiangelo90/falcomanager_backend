@@ -1,70 +1,148 @@
 package com.acorp.falcodoro.falcodoromanager.models;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Entity(name = "BookingModel")
-@Table(name = "BOOKING")
+@Table(name = "BOOKING",
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"room_id", "booking_date"}))
 public class BookingModel {
 
-        @Id
-        @SequenceGenerator(
-                name = "booking_id",
-                sequenceName = "booking_id",
-                allocationSize = 1
-        )
-        @GeneratedValue(
-                strategy = GenerationType.SEQUENCE,
-                generator = "booking_id"
-        )
-        @Column(
-                name = "booking_id",
-                updatable = false
-        )
-        private long bookingId;
-        private String customerName;
+    @Id
+    @SequenceGenerator(
+            name = "booking_id",
+            sequenceName = "booking_id",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "booking_id"
+    )
+    @Column(
+            name = "booking_id",
+            updatable = false
+    )
+    private long bookingId;
+    private String customerName;
+    private String code;
+    @Column(
+            name = "room_id"
+    )
+    private int roomId;
+    private int nightNumbers;
 
-        @ManyToOne
-        private RoomModel roomModel;
-        private Date bdate;
+    @Column(name = "booking_date")
+    private String bookingDate;
 
-        public BookingModel() {}
+    private BookingSource sourceBooking;
 
-        public BookingModel(String customerName, RoomModel roomModel, Date bdate) {
-                this.customerName = customerName;
-                this.roomModel = roomModel;
-                this.bdate = bdate;
-        }
+    private String details;
 
-        public String getCustomerName() {
-                return customerName;
-        }
+    private PaidEnum paid;
 
-        public void setCustomerName(String customerName) {
-                this.customerName = customerName;
-        }
+    @Column(name = "deposit", nullable = false)
+    private String deposit;
 
-        public RoomModel getRoomModel() {
-                return roomModel;
-        }
 
-        public void setRoomModel(RoomModel roomModel) {
-                this.roomModel = roomModel;
-        }
+    public BookingModel() {
+    }
 
-        public Date getBdate() {
-                return bdate;
-        }
 
-        public void setBdate(Date bdate) {
-                this.bdate = bdate;
-        }
+    public int getNightNumbers() {
+        return nightNumbers;
+    }
 
-        public long getBookingId() {
-                return bookingId;
-        }
+    public void setNightNumbers(int nightNumbers) {
+        this.nightNumbers = nightNumbers;
+    }
 
-        public void setBookingId(long bookingId) {
-                this.bookingId = bookingId;
-        }
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public BookingSource getSourceBooking() {
+        return sourceBooking;
+    }
+
+    public void setSourceBooking(BookingSource sourceBooking) {
+        this.sourceBooking = sourceBooking;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public PaidEnum getPaid() {
+        return paid;
+    }
+
+    public void setPaid(PaidEnum paid) {
+        this.paid = paid;
+    }
+
+    public String getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(String deposit) {
+        this.deposit = deposit;
+    }
+
+    public BookingModel(String customerName, String code, int roomId, int nightNumbers, String bookingDate, BookingSource sourceBooking, String details, PaidEnum paid, String deposit) {
+        this.customerName = customerName;
+        this.code = code;
+        this.roomId = roomId;
+        this.nightNumbers = nightNumbers;
+        this.bookingDate = bookingDate;
+        this.sourceBooking = sourceBooking;
+        this.details = details;
+        this.paid = paid;
+        this.deposit = deposit;
+    }
 }

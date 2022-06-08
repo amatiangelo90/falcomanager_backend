@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface RoomRepository extends JpaRepository<RoomModel, Long> {
     @Query("SELECT room FROM RoomModel room WHERE room.roomNumber = ?1")
-    Optional<RoomModel> findByRoomNumber(long roomId);
+    Optional<RoomModel> findByRoomNumber(int roomId);
 }

@@ -2,6 +2,7 @@ package com.acorp.falcodoro.falcodoromanager.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 
 @Entity(name = "RoomModel")
@@ -22,6 +23,9 @@ public class RoomModel implements Serializable {
             updatable = false
     )
     private long roomId;
+    @Column(
+            name = "roomnumber"
+    )
     private int roomNumber;
 
     @ManyToOne(fetch=FetchType.EAGER)
@@ -30,10 +34,6 @@ public class RoomModel implements Serializable {
 
     public RoomModel() {}
 
-    public RoomModel(int roomNumber, RoomTypeModel roomTypeModel) {
-        this.roomNumber = roomNumber;
-        this.roomTypeModel = roomTypeModel;
-    }
 
     public long getRoomId() {
         return roomId;
