@@ -37,6 +37,7 @@ public class BookingModel {
     private int roomId;
     private int nightNumbers;
 
+
     @Column(name = "booking_date")
     private String bookingDate;
 
@@ -46,28 +47,14 @@ public class BookingModel {
 
     private PaidEnum paid;
 
-    @Column(name = "deposit", nullable = false)
+    @Column(name = "deposit")
     private String deposit;
+
+    @Column(name = "guests", nullable = false)
+    private int guests;
 
 
     public BookingModel() {
-    }
-
-
-    public int getNightNumbers() {
-        return nightNumbers;
-    }
-
-    public void setNightNumbers(int nightNumbers) {
-        this.nightNumbers = nightNumbers;
-    }
-
-    public String getBookingDate() {
-        return bookingDate;
-    }
-
-    public void setBookingDate(String bookingDate) {
-        this.bookingDate = bookingDate;
     }
 
     public long getBookingId() {
@@ -102,6 +89,22 @@ public class BookingModel {
         this.roomId = roomId;
     }
 
+    public int getNightNumbers() {
+        return nightNumbers;
+    }
+
+    public void setNightNumbers(int nightNumbers) {
+        this.nightNumbers = nightNumbers;
+    }
+
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
     public BookingSource getSourceBooking() {
         return sourceBooking;
     }
@@ -134,7 +137,15 @@ public class BookingModel {
         this.deposit = deposit;
     }
 
-    public BookingModel(String customerName, String code, int roomId, int nightNumbers, String bookingDate, BookingSource sourceBooking, String details, PaidEnum paid, String deposit) {
+    public int getGuests() {
+        return guests;
+    }
+
+    public void setGuests(int guests) {
+        this.guests = guests;
+    }
+
+    public BookingModel(String customerName, String code, int roomId, int nightNumbers, String bookingDate, BookingSource sourceBooking, String details, PaidEnum paid, String deposit, int guests) {
         this.customerName = customerName;
         this.code = code;
         this.roomId = roomId;
@@ -144,5 +155,6 @@ public class BookingModel {
         this.details = details;
         this.paid = paid;
         this.deposit = deposit;
+        this.guests = guests;
     }
 }

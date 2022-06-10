@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BookingService {
@@ -27,7 +25,28 @@ public class BookingService {
 
     @Transactional
     public void addNewBooking(BookingModel bookingModel) {
+
         try {
+            List<String> wantedDatesToReserve = new ArrayList<>();
+            for(int i = 0; i < bookingModel.getNightNumbers(); i++){
+                try {
+                    if(i != 0){
+                        wantedDatesToReserve.add(sdf.format(addDays(sdf.parse(bookingModel.getBookingDate()), i)));
+                    }
+
+                } catch (ParseException e) {
+                    throw new IllegalStateException("Errore di sistema. Non dovremme mai capitare questo ma se è capitato contattare quel coglione di Amati");
+                }
+            }
+            List<BookingModel> onWantedRoomReservationsList = bookingRepository.findByRoomId(bookingModel.getRoomId());
+
+
+            for(int i = 0; i < onWantedRoomReservationsList.size(); i++){
+                if(wantedDatesToReserve.contains(onWantedRoomReservationsList.get(i).getBookingDate())){
+                    throw new IllegalStateException("Errore! Esiste già una prenotazione per le date selezionate.");
+                }
+            }
+
             bookingRepository.save(new BookingModel(
                     bookingModel.getCustomerName(),
                     bookingModel.getCode(),
@@ -37,7 +56,8 @@ public class BookingService {
                     bookingModel.getSourceBooking(),
                     bookingModel.getDetails(),
                     bookingModel.getPaid(),
-                    bookingModel.getDeposit()));
+                    bookingModel.getDeposit(),
+                    bookingModel.getGuests()));
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -92,4 +112,117 @@ public class BookingService {
         }
 
     }
+
+    @Transactional
+    public void update(BookingModel bookingModel) {
+        List<BookingModel> updatingBookModelListForCodeBooking = bookingRepository.findByCode(bookingModel.getCode());
+
+        if(updatingBookModelListForCodeBooking.isEmpty()){
+            throw new IllegalStateException("Errore. Non ho trovato prenotazioni da aggiornare");
+
+        }else{
+            List<String> wantedDatesToReserve = new ArrayList<>();
+            for(int i = 0; i < bookingModel.getNightNumbers(); i++){
+                try {
+                    if(i != 0){
+                        wantedDatesToReserve.add(sdf.format(addDays(sdf.parse(bookingModel.getBookingDate()), i)));
+                    }
+
+                } catch (ParseException e) {
+                    throw new IllegalStateException("Errore di sistema. Non dovremme mai capitare questo ma se è capitato contattare quel coglione di Amati");
+                }
+            }
+            List<BookingModel> onWantedRoomReservationsList = bookingRepository.findByRoomId(bookingModel.getRoomId());
+
+
+            for(int i = 0; i < onWantedRoomReservationsList.size(); i++){
+                if(wantedDatesToReserve.contains(onWantedRoomReservationsList.get(i).getBookingDate())){
+                    throw new IllegalStateException("Errore! Esiste già una prenotazione per le date selezionate.");
+                }
+            }
+
+            if(updatingBookModelListForCodeBooking.get(0).getNightNumbers() != bookingModel.getNightNumbers())
+                updatingBookModelListForCodeBooking.get(0).setNightNumbers(bookingModel.getNightNumbers());
+
+            if(updatingBookModelListForCodeBooking.get(0).getPaid() != bookingModel.getPaid())
+                updatingBookModelListForCodeBooking.get(0).setPaid(bookingModel.getPaid());
+
+            if(updatingBookModelListForCodeBooking.get(0).getPaid() != bookingModel.getPaid())
+                updatingBookModelListForCodeBooking.get(0).setPaid(bookingModel.getPaid());
+
+            if(updatingBookModelListForCodeBooking.get(0).getDeposit() != bookingModel.getDeposit())
+                updatingBookModelListForCodeBooking.get(0).setDeposit(bookingModel.getDeposit());
+
+            if(updatingBookModelListForCodeBooking.get(0).getDetails() != bookingModel.getDetails())
+                updatingBookModelListForCodeBooking.get(0).setDetails(bookingModel.getDetails());
+
+            if(updatingBookModelListForCodeBooking.get(0).getGuests() != bookingModel.getGuests())
+                updatingBookModelListForCodeBooking.get(0).setGuests(bookingModel.getGuests());
+
+            if(updatingBookModelListForCodeBooking.get(0).getCustomerName() != bookingModel.getCustomerName())
+                updatingBookModelListForCodeBooking.get(0).setCustomerName(bookingModel.getCustomerName());
+
+            if(updatingBookModelListForCodeBooking.get(0).getSourceBooking() != bookingModel.getSourceBooking())
+                updatingBookModelListForCodeBooking.get(0).setSourceBooking(bookingModel.getSourceBooking());
+
+        }
+    }
+
+    private void getBusyDateListFromRoomId(List<BookingModel> onWantedRoomReservationsList, Set<String> busyDate) {
+        for(int i = 0; i < onWantedRoomReservationsList.size(); i++){
+
+            for(int night = 0; night < onWantedRoomReservationsList.get(i).getNightNumbers(); night ++){
+
+                try {
+                    Date currentDate = sdf.parse(onWantedRoomReservationsList.get(i).getBookingDate());
+                    busyDate.add(sdf.format(addDays(currentDate, night)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+
+    @Transactional
+    public void moveReservation(BookingModel bookingModel) {
+        List<BookingModel> updatingBookModel = bookingRepository.findByCode(bookingModel.getCode());
+        List<BookingModel> onWantedRoomReservationsList = bookingRepository.findByRoomId(bookingModel.getRoomId());
+
+
+        Set<String> busyDate = new HashSet<>();
+
+        getBusyDateListFromRoomId(onWantedRoomReservationsList, busyDate);
+
+
+        if(updatingBookModel.isEmpty()){
+            throw new IllegalStateException("Errore. Non ho trovato prenotazioni da aggiornare");
+        }else if(reservationForTheSameRoomOnCommonDateAlreadyExist(busyDate, bookingModel)){
+            throw new IllegalStateException("Errore. Non puoi spostare la prenotazione perche i giorni selezionati per questa stanza risultano già occupati");
+        }else {
+            if(updatingBookModel.get(0).getRoomId() != bookingModel.getRoomId())
+                updatingBookModel.get(0).setRoomId(bookingModel.getRoomId());
+
+            if(updatingBookModel.get(0).getBookingDate() != bookingModel.getBookingDate())
+                updatingBookModel.get(0).setBookingDate(bookingModel.getBookingDate());
+        }
+
+    }
+
+    private boolean reservationForTheSameRoomOnCommonDateAlreadyExist(Set<String> busyDate, BookingModel bookingModel) {
+
+        for(int i = 0; i < bookingModel.getNightNumbers(); i++){
+            try {
+                if(busyDate.contains(sdf.format(addDays(sdf.parse(bookingModel.getBookingDate()), i)))){
+                    return true;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+
+    }
+
 }

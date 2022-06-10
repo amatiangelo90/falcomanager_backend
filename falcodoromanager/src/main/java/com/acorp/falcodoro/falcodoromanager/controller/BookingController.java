@@ -52,4 +52,13 @@ public class BookingController {
     public void addDay(@PathVariable("bookingid") long bookingid, @PathVariable("roomid") int roomid, @PathVariable("reservationdate") String reservationdate, @PathVariable("nights") int nights){
         bookingService.addDay(bookingid, roomid, reservationdate, nights);
     }
+    @PostMapping(path = "/movereservation")
+    public void moveReservation(BookingModel bookingModel){
+        bookingService.moveReservation(bookingModel);
+    }
+
+    @PutMapping(path = "/update")
+    public void updateBooking(BookingModel bookingModel){
+        bookingService.update(bookingModel);
+    }
 }
