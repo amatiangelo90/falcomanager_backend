@@ -57,7 +57,9 @@ public class BookingService {
                     bookingModel.getDetails(),
                     bookingModel.getPaid(),
                     bookingModel.getDeposit(),
-                    bookingModel.getGuests()));
+                    bookingModel.getGuests(),
+                    bookingModel.getTotal()
+                    ));
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -164,6 +166,9 @@ public class BookingService {
 
             if(updatingBookModelListForCodeBooking.get(0).getSourceBooking() != bookingModel.getSourceBooking())
                 updatingBookModelListForCodeBooking.get(0).setSourceBooking(bookingModel.getSourceBooking());
+
+            if(updatingBookModelListForCodeBooking.get(0).getTotal() != bookingModel.getTotal())
+                updatingBookModelListForCodeBooking.get(0).setTotal(bookingModel.getTotal());
 
         }
     }

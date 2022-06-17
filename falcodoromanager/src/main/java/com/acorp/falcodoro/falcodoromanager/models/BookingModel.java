@@ -53,6 +53,9 @@ public class BookingModel {
     @Column(name = "guests", nullable = false)
     private int guests;
 
+    @Column(name = "total")
+    private String total;
+
 
     public BookingModel() {
     }
@@ -145,7 +148,15 @@ public class BookingModel {
         this.guests = guests;
     }
 
-    public BookingModel(String customerName, String code, int roomId, int nightNumbers, String bookingDate, BookingSource sourceBooking, String details, PaidEnum paid, String deposit, int guests) {
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public BookingModel(String customerName, String code, int roomId, int nightNumbers, String bookingDate, BookingSource sourceBooking, String details, PaidEnum paid, String deposit, int guests, String total) {
         this.customerName = customerName;
         this.code = code;
         this.roomId = roomId;
@@ -156,5 +167,6 @@ public class BookingModel {
         this.paid = paid;
         this.deposit = deposit;
         this.guests = guests;
+        this.total = total;
     }
 }
